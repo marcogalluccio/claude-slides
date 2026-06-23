@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fai le slide con Claude — Guida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#2563EB;
+    --secondary:#7C3AED;
+    --cream:#F7F6F2;
+    --ink:#15151b;
+    --body:#4a4a52;
+    --muted:#9a9aa2;
+    --line:#e6e3db;
+    --grad:linear-gradient(135deg,#2563EB 0%,#7C3AED 100%);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#dedbd3;
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    padding:32px 0;
+  }
+
+  .page{
+    width:210mm;
+    height:297mm;
+    background:var(--cream);
+    margin:0 auto 28px;
+    padding:15mm 16mm;
+    position:relative;
+    box-shadow:0 18px 50px rgba(0,0,0,.18);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  .eyebrow{
+    font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--secondary);margin:0 0 9px;
+  }
+  h1{font-size:43px;line-height:1.03;font-weight:900;letter-spacing:-.025em;margin:0;}
+  h2{font-size:31px;line-height:1.06;font-weight:800;letter-spacing:-.02em;margin:0;}
+  p{color:var(--body);line-height:1.5;font-size:14px;margin:0;}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .topbar{height:5px;width:58px;background:var(--grad);border-radius:3px;margin-bottom:16px;}
+  .pagenum{position:absolute;bottom:9mm;right:16mm;font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.04em;}
+  .brandline{position:absolute;bottom:9mm;left:16mm;font-size:10.5px;color:var(--muted);font-weight:600;}
+
+  /* ---------- PAGE 1 ---------- */
+  .deco{position:absolute;top:-130px;right:-110px;width:380px;height:380px;border-radius:50%;background:var(--grad);opacity:.10;}
+  .cover h1{font-size:48px;margin-bottom:13px;}
+  .cover .sub{font-size:16.5px;color:var(--body);line-height:1.48;max-width:150mm;font-weight:500;}
+
+  .startbox{
+    margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:16px;
+    padding:18px 22px;box-shadow:0 8px 24px rgba(37,99,235,.07);position:relative;
+  }
+  .startbox::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:5px;border-radius:3px;background:var(--grad);}
+  .badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--grad);padding:4px 11px;border-radius:999px;margin-bottom:11px;}
+  .startbox .lead{font-size:18px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:10px;}
+  .startbox .cmd{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink);background:var(--cream);border:1px solid var(--line);border-radius:9px;padding:11px 13px;line-height:1.5;margin-bottom:10px;}
+  .startbox .hint{font-size:13px;color:var(--body);line-height:1.45;}
+  .startbox .hint b{color:var(--secondary);}
+
+  .section-label{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--secondary);margin:24px 0 12px;}
+  .cards{display:flex;flex-direction:column;gap:11px;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px 18px;display:flex;gap:16px;align-items:flex-start;}
+  .card .num{flex:0 0 auto;font-size:18px;font-weight:900;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--grad);color:#fff;}
+  .card .ctitle{font-size:16px;font-weight:800;color:var(--ink);margin:0 0 4px;}
+  .card .ctitle .where{font-weight:600;color:var(--muted);font-size:13px;}
+  .card .ctxt{font-size:13px;color:var(--body);line-height:1.45;}
+  .card .ctxt b{color:var(--ink);font-weight:700;}
+  .repo-line{margin-top:16px;padding:13px 18px;border-radius:12px;background:var(--ink);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:14px;}
+  .repo-line .lbl{font-size:12px;color:#bdbdc7;font-weight:600;}
+  .repo-line .url{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:500;}
+
+  /* ---------- PAGE 2 ---------- */
+  .note{font-size:13px;color:var(--body);background:#fff;border:1px solid var(--line);border-left:4px solid var(--secondary);border-radius:0 9px 9px 0;padding:11px 15px;margin:13px 0 18px;line-height:1.45;}
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:11px 22px;margin:0 0 20px;padding:0;list-style:none;}
+  .rules li{position:relative;padding:0 0 0 22px;font-size:13.5px;color:var(--body);line-height:1.42;}
+  .rules li b{color:var(--ink);font-weight:700;}
+  .rules li::before{content:"";position:absolute;left:2px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--grad);}
+  .skel-h{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--secondary);margin:0 0 9px;}
+  pre.code{margin:0;background:#15151b;border-radius:12px;padding:15px 18px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.5;color:#e8e8ee;white-space:pre;}
+  pre.code .c{color:#7c8095;}
+  pre.code .t{color:#8ab4ff;}
+  pre.code .k{color:#c9a4ff;}
+
+  .closeband{margin-top:auto;display:flex;gap:18px;align-items:stretch;}
+  .biglink{flex:1;display:flex;flex-direction:column;justify-content:center;padding:18px 22px;border-radius:15px;background:var(--grad);color:#fff;text-decoration:none;}
+  .biglink .bl-lbl{font-size:12px;font-weight:600;opacity:.85;letter-spacing:.03em;margin-bottom:6px;}
+  .biglink .bl-url{font-family:'JetBrains Mono',monospace;font-size:15.5px;font-weight:600;}
+  .sign{flex:0 0 56mm;background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px 20px;display:flex;flex-direction:column;justify-content:center;}
+  .sign .by{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:2px;}
+  .sign .name{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.01em;}
+  .sign .li{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--secondary);font-weight:500;margin-top:8px;}
+  .sign .tip{font-size:12.5px;color:var(--body);line-height:1.4;margin-top:8px;}
+
+  @page{size:A4;margin:0;}
+  @media print{
+    body{background:#fff;padding:0;}
+    .page{box-shadow:none;margin:0;page-break-after:always;}
+    .page:last-child{page-break-after:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== PAGE 1 ===================== -->
+<section class="page cover">
+  <div class="deco"></div>
+
+  <p class="eyebrow">Guida pratica</p>
+  <h1>Fai le slide<br>con <span class="grad-text">Claude</span></h1>
+  <p class="sub" style="margin-top:13px;">Presentazioni vere, in HTML. Si aprono nel browser, si navigano con le frecce, hanno le animazioni dentro. Niente PowerPoint, niente Canva.</p>
+
+  <div class="startbox">
+    <span class="badge">Inizia qui</span>
+    <div class="lead">Vuoi le slide adesso?</div>
+    <div class="cmd">Allega questo file a Claude e scrivi:<br>"fai le slide su [il tuo argomento] seguendo le istruzioni qui dentro"</div>
+    <p class="hint">Funziona anche su claude.ai gratis. <b>Non sai quale Claude usi?</b> Allega comunque il file e chiediglielo: te lo dice lui.</p>
+  </div>
+
+  <p class="section-label">Quale Claude usi? Tre modi, dal piu semplice</p>
+  <div class="cards">
+    <div class="card">
+      <div class="num">1</div>
+      <div>
+        <div class="ctitle">claude.ai <span class="where">sito o app, il piu comune</span></div>
+        <div class="ctxt"><b>Allega questo file</b> in una chat e chiedi le slide: le genera subito, qui. Per averla sempre pronta, scarica lo zip pronto (link sotto) e caricalo <b>intatto, senza aprirlo</b>, in Impostazioni, Funzionalita, Skill.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="num">2</div>
+      <div>
+        <div class="ctitle">Cowork <span class="where">Claude che lavora su claude.ai</span></div>
+        <div class="ctxt">Stesso zip installato come Skill. Poi in ogni chat scrivi <b>"crea slide per..."</b> e parte da solo, consegnando il file finito da scaricare.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="num">3</div>
+      <div>
+        <div class="ctitle">Claude Code <span class="where">da terminale, per chi sviluppa</span></div>
+        <div class="ctxt">Incolla a Claude il link del repo e <b>fatti guidare</b>, oppure clona la skill nella tua cartella. Versione completa, con tutti i layout e le animazioni.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="repo-line">
+    <span class="lbl">Zip pronto per claude.ai</span>
+    <span class="url">github.com/marcogalluccio/claude-slides/releases</span>
+  </div>
+
+  <div class="brandline">di Marco Galluccio</div>
+  <div class="pagenum">01 / 02</div>
+</section>
+
+<!-- ===================== PAGE 2 ===================== -->
+<section class="page">
+  <div class="topbar"></div>
+  <p class="eyebrow">Sotto il cofano</p>
+  <h2>Come Claude fa le slide</h2>
+  <div class="note">Se hai allegato questo file, Claude segue queste regole e genera il deck nella tua chat. Non ti servono se installi la skill completa dal repo: le ha gia dentro.</div>
+
+  <ul class="rules">
+    <li><b>Un solo file HTML</b>, autonomo. 16:9, si naviga con le frecce, barra di avanzamento e schermo intero. Si stampa anche in PDF.</li>
+    <li><b>Un concetto per slide.</b> Titoli brevi, su una riga, senza punto finale.</li>
+    <li><b>Numerazione 01, 02, 03.</b> Niente trattini lunghi, niente emoji dentro le slide.</li>
+    <li><b>Cover e chiusura su gradiente</b> colorato, slide centrali chiare.</li>
+    <li><b>Prima il piano:</b> argomento, pubblico, tipo (workshop, pitch, talk, demo, recap), durata. Poi la scaletta da approvare. Poi genera.</li>
+    <li><b>Per il tuo brand:</b> due colori e un font, le variabili in cima al file.</li>
+  </ul>
+
+  <p class="skel-h">Lo scheletro — Claude lo espande, non lo copia</p>
+  <pre class="code"><span class="c">&lt;!-- deck minimo: Claude parte da qui e lo riempie --&gt;</span>
+<span class="t">&lt;!DOCTYPE html&gt;&lt;html</span> lang=<span class="k">"it"</span><span class="t">&gt;&lt;head&gt;&lt;meta</span> charset=<span class="k">"utf-8"</span><span class="t">&gt;&lt;style&gt;</span>
+  :root{ --primary:#2563EB; --secondary:#7C3AED; --cream:#F7F6F2; }
+  body{ margin:0; font-family:Inter,sans-serif; background:var(--cream); }
+  .slide{ width:100vw; height:100vh; padding:6vw; display:none;
+          flex-direction:column; justify-content:center; box-sizing:border-box; }
+  .slide.on{ display:flex; }
+  .cover{ background:linear-gradient(135deg,var(--primary),var(--secondary)); color:#fff; }
+<span class="t">&lt;/style&gt;&lt;/head&gt;&lt;body&gt;</span>
+  <span class="t">&lt;section</span> class=<span class="k">"slide cover on"</span><span class="t">&gt;&lt;h1&gt;</span>Titolo del deck<span class="t">&lt;/h1&gt;&lt;/section&gt;</span>
+  <span class="t">&lt;section</span> class=<span class="k">"slide"</span><span class="t">&gt;&lt;h2&gt;</span>Un concetto per slide<span class="t">&lt;/h2&gt;&lt;/section&gt;</span>
+  <span class="c">&lt;!-- altre slide qui --&gt;</span>
+  <span class="t">&lt;script&gt;</span> let i=0, s=document.querySelectorAll(<span class="k">'.slide'</span>);
+    onkeydown=e=>{ i=Math.max(0,Math.min(s.length-1, i+(e.key==<span class="k">'ArrowRight'</span>)-(e.key==<span class="k">'ArrowLeft'</span>)));
+                   s.forEach((el,k)=>el.classList.toggle(<span class="k">'on'</span>,k==i)); }; <span class="t">&lt;/script&gt;</span>
+<span class="t">&lt;/body&gt;&lt;/html&gt;</span></pre>
+
+  <div class="closeband">
+    <a class="biglink" href="https://github.com/marcogalluccio/claude-slides">
+      <div class="bl-lbl">Versione completa, gratis e open source</div>
+      <div class="bl-url">github.com/marcogalluccio/claude-slides</div>
+    </a>
+    <div class="sign">
+      <div class="by">Fatto da</div>
+      <div class="name">Marco Galluccio</div>
+      <a class="li" href="https://www.linkedin.com/in/marco-galluccio/" style="text-decoration:none;">linkedin.com/in/marco-galluccio</a>
+      <div class="tip">Se la provi, fammi sapere come va.</div>
+    </div>
+  </div>
+
+  <div class="pagenum">02 / 02</div>
+</section>
+
+</body>
+</html>

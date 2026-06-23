@@ -1,0 +1,6 @@
+guida/*.html
+.git/
+.DS_Store
+components.md
+animations.md
+icons.md
