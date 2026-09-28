@@ -2,6 +2,8 @@
 
 An agent skill that turns a short brief into a presentation you can run from any browser.
 
+Project page: https://marcogalluccio.com/claude-slides/
+
 ## What it is
 
 Claude Slides is a skill for [Claude Code](https://claude.com/claude-code) that generates HTML slide decks: a fixed 1920×1080 canvas, keyboard navigation (arrow keys, space), progress bar, fullscreen, print-to-PDF. Every deck is a single self-contained HTML file, with an opt-in animation system for in-slide step reveals (cards appearing one by one, SVG arrows drawing themselves, popup payoffs).
